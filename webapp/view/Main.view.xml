@@ -1,0 +1,261 @@
+<mvc:View controllerName="SYNC.zdcmmui5ekko.controller.Main"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:m="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:semantic="sap.m.semantic"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:table="sap.ui.table">
+    <f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showFooter="true">
+		<!-- DynamicPage Title -->
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:content>
+                </f:content>
+                <f:actions>
+                </f:actions>
+                <f:navigationActions>
+                </f:navigationActions>
+            </f:DynamicPageTitle>
+        </f:title>
+        <!-- DynamicPage Header -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <l:Grid id="idGrid" vSpacing="1" hSpacing="1">
+                    <l:content>
+                        <l:VerticalLayout id="verLay" width="20rem">
+                            <l:layoutData>
+                                <l:GridData id="idGrDat1" span="L4 M8 S12"/>
+                            </l:layoutData>
+                            <l:content>
+                                <m:Label id="ALabel" text="결재 담당자:" labelFor="startDateEvent" vAlign="Top" /> 
+                                <m:Input value="박현우" editable="false" />
+                            </l:content>
+                        </l:VerticalLayout>
+                        <l:VerticalLayout id="verLay2" width="30rem">
+                            <l:layoutData>
+                                 <l:GridData id="idGrDat2" span="L4 M8 S12"/>
+                            </l:layoutData>
+                            <l:content>
+                                <m:Label id="ALabel1" text="구매 주문 일자:" labelFor="startDateEvent" vAlign="Top"/> 
+                                <m:HBox alignItems="Center" width="100%">
+                                    <m:VBox width="30%">
+                                        <m:DatePicker id="startDateEvent" width="100%" placeholder="시작 월 입력 "
+                                                      valueFormat="yyyy-MM" displayFormat="yyyy-MM" change="handleChange" class="sapUiSmallMarginBottom" />
+                                    </m:VBox>
+                                    <m:Text text= "~" width="100%" textAlign="Begin"
+                                        class="sapUiTinyMarginBegin sapUiTinyMarginEnd" />
+                                    <m:VBox width="30%">
+                                        <m:DatePicker id="endDateEvent" width="100%" placeholder="끝 월 입력"
+                                                      valueFormat="yyyy-MM" displayFormat="yyyy-MM" change="handleChange" class="sapUiSmallMarginBottom" />
+                                        
+                                    </m:VBox>
+                                </m:HBox>                                                                   
+                            </l:content>
+                        </l:VerticalLayout>
+                        <l:VerticalLayout id="verLay3" width="10rem" >
+                            <l:layoutData>
+                                 <l:GridData id="idGrDat3" span="L4 M2 S12"/>
+                            </l:layoutData>
+                            <l:content>
+                                <m:Label id="ALabel2" text="" labelFor="startDateEvent" vAlign="Top"/>
+                                <m:HBox alignItems="Center" width="100%">
+                                    <m:Button text="검색" press="onPress" />
+                                </m:HBox> 
+                            </l:content>
+                        </l:VerticalLayout>
+                    </l:content>
+                </l:Grid>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+                <m:IconTabBar
+				id="iconTabBar"
+				select=".onQuickFilter"
+				expandable="false"
+                selectedKey="getApproval">
+				<m:items>
+					<m:IconTabFilter
+						key="all"
+						showAll="true"
+						count="{worklistView>/countAll}"
+						text="{i18n>All}"/>
+					<m:IconTabSeparator/>
+					<m:IconTabFilter
+						key="approve"
+						icon="sap-icon://message-success"
+						iconColor="Positive"
+						count="{worklistView>/approve}"
+						text="{i18n>Approve}"/>
+					<m:IconTabFilter
+						key="getApproval"
+						icon="sap-icon://message-warning"
+						iconColor="Critical"
+						count="{worklistView>/getApproval}"
+						text="{i18n>getApproval}"/>
+					<m:IconTabFilter
+						key="companion"
+						icon="sap-icon://message-error"
+						iconColor="Negative"
+						count="{worklistView>/companion}"
+						text="{i18n>Companion}"/>
+				</m:items>
+				<m:content>
+                        <m:Table
+                            id="table"
+                            width="auto"
+                            mode="SingleSelectMaster"
+                            items="{
+                                path: 'odataModel>/EkkoSet',
+                                sorter: {
+                                    path: 'odataModel>Ponum',
+                                    descending: false
+                                }
+                            }"
+                            noDataText="{worklistView>/tableNoDataText}"
+                            busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+                            growing="true"
+                            growingScrollToLoad="true"
+                            updateFinished=".onUpdateFinished"
+                            selectionChange='.onSelectionChange'>
+                            <!-- <m:headerToolbar>
+                                <m:Toolbar>
+                                    <m:Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
+                                    <m:ToolbarSpacer />
+                                    <m:SearchField
+                                        id="searchField"
+                                        tooltip="{i18n>worklistSearchTooltip}"
+                                        search=".onSearch"
+                                        width="auto">
+                                    </m:SearchField>
+                                </m:Toolbar>
+                            </m:headerToolbar>   -->
+                                <m:columns>
+                                    <m:Column id="PonumColumn">
+                                        <m:Text
+                                            id="PonumNameColumnTitle"
+                                            text="{i18n>Ponum}"/>
+                                    </m:Column>
+                                     <m:Column id="MatnrColumn">
+                                        <m:Text
+                                            id="MatnrNameColumn"
+                                            text="{i18n>Matnr}"/>
+                                    </m:Column>
+                                    <m:Column id="MaktxColumn">
+                                        <m:Text
+                                            id="MaktxNameColumn"
+                                            text="{i18n>Maktx}"/>
+                                    </m:Column>
+                                    <m:Column id="BukrsColumn">
+                                        <m:Text
+                                            id="BukrsNameColumn"
+                                            text="{i18n>Bukrs}"/>
+                                    </m:Column>
+                                    <m:Column id="BukrstColumn">
+                                        <m:Text
+                                            id="BukrstNameColumn"
+                                            text="{i18n>Bukrst}"/>
+                                    </m:Column>
+                                    <m:Column id="PriceColumn">
+                                        <m:Text
+                                            id="PriceNameColumn"
+                                            text="{i18n>Price}"/>
+                                    </m:Column>
+                                    <m:Column id="TopriColumn">
+                                        <m:Text
+                                            id="TopriNameColumn"
+                                            text="{i18n>Topri}"/>
+                                    </m:Column>
+                                    <m:Column id="MaeaColumn">
+                                        <m:Text
+                                            id="MaeaNameColumn"
+                                            text="{i18n>Maea}"/>
+                                    </m:Column>
+                                    <!-- <m:Column id="MeinsColumn">
+                                        <m:Text
+                                            id="MeinsNameColumn"
+                                            text="{i18n>Meins}"/>
+                                    </m:Column> -->
+                                    <m:Column id="PodatColumn">
+                                        <m:Text
+                                            id="PodatNameColumn"
+                                            text="{i18n>Podat}"/>
+                                    </m:Column>
+                                    <m:Column id="PrdatColumn">
+                                        <m:Text
+                                            id="PrdatNameColumn"
+                                            text="{i18n>Prdat}"/>
+                                    </m:Column>
+                                    <!-- <m:Column id="ApprqColumn">
+                                        <m:Text
+                                            id="ApprqNameColumn"
+                                            text="{i18n>Apprq}"/>
+                                    </m:Column>
+                                    <m:Column id="SflagColumn">
+                                        <m:Text
+                                            id="SflagNameColumn"
+                                            text="{i18n>Sflag}"/>
+                                    </m:Column> -->
+                                </m:columns>
+                                <m:items>
+                                    <m:ColumnListItem>
+                                            <m:cells>
+                                            <m:Text text = "{odataModel>Ponum}"/>
+                                            <m:Text text = "{odataModel>Matnr}"/>
+                                            <m:Text text = "{odataModel>Maktx}"/>
+                                            <m:Text text = "{odataModel>Bukrs}"/>
+                                            <m:Text text = "{odataModel>Bukrst}"/>
+                                            <m:ObjectNumber
+                                                unit="{odataModel>Waers}"
+                                                number="{
+                                                path: 'odataModel>Price',
+                                                type: 'sap.ui.model.type.Float',
+                                                formatOptions: {showMeasure: false},
+                                                formatter: '.formatter.numberUnit'
+                                                }"/>    
+                                            <m:ObjectNumber
+                                                unit="{odataModel>Waers}"
+                                                number="{
+                                                path: 'odataModel>Topri',
+                                                type: 'sap.ui.model.type.Float',
+                                                formatOptions: {showMeasure: false},
+                                                formatter: '.formatter.numberUnit'
+                                                }"/>    
+                                            <m:ObjectNumber
+                                                unit="{odataModel>Meins}"
+                                                number="{
+                                                path: 'odataModel>Maea',
+                                                formatter: '.formatter.numberUnit'
+                                                }"
+                                                />
+                                            <m:Text text = "{odataModel>Podat}"/>
+                                            <m:Text text = "{odataModel>Prdat}"/>
+                                            <!-- <m:Text text = "{odataModel>Apprq}"/>
+                                            <m:Text text = "{odataModel>Sflag}"/> -->
+
+                                        </m:cells>
+                                    </m:ColumnListItem>
+                                </m:items>
+                         </m:Table>   
+				</m:content>
+			</m:IconTabBar>
+        </f:content>
+
+        <f:footer>
+				<m:OverflowToolbar>
+					<m:Button icon="sap-icon://message-popup"
+							text="{/messagesLength}"
+							type="Emphasized"
+							press="onMessageButtonPress"
+							visible="{= !!${/messagesLength}}"/>
+					<m:ToolbarSpacer/>
+					<m:Button type="Accept" text="승인"
+                              press="onPressAccet" />
+					<m:Button type="Reject" text="반려"
+                              press="onPressReject"/>
+				</m:OverflowToolbar>
+			</f:footer>
+    </f:DynamicPage>
+    
+</mvc:View>
